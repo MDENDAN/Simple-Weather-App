@@ -85,56 +85,71 @@ class _LocationPageState extends State<LocationPage> {
     return Scaffold(
       appBar: AppBar(title: const Text("Location Page")),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'LAT: ${_currentPosition?.latitude ?? ""}',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    'LNG: ${_currentPosition?.longitude ?? ""}',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    'ADDRESS: ${_currentAddress ?? ""}',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'LATITUDE: ${_currentPosition?.latitude ?? ""}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  'LONGITUDE: ${_currentPosition?.longitude ?? ""}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  'ADDRESS: ${_currentAddress ?? ""}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 32),
+                Center(
+                  child: ElevatedButton(
                     onPressed: _getCurrentPosition,
                     child: const Text("Get Current Location"),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-                child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  isLocationClick
-                      ? ElevatedButton(
-                          onPressed: () {
-                            getWeatherDetails();
-                            setState(() {
-                              isWeatherClick = true;
-                            });
-                          },
-                          child: Text("Get Weather Details"))
-                      : Container(),
-                  SizedBox(
-                    height: 10,
                   ),
-                  isWeatherClick ? weather() : Container()
-                ],
-              ),
-            ))
-          ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Divider(
+                  color: Colors.black, //color of divider
+                  height: 5, //height spacing of divider
+                  thickness: 1, //thickness of divier line
+                  indent: 15, //spacing at the start of divider
+                  endIndent: 15, //spacing at the end of divider
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        isLocationClick
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  getWeatherDetails();
+                                  setState(() {
+                                    isWeatherClick = true;
+                                  });
+                                },
+                                child: Text("Get Weather Details"))
+                            : Container(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        isWeatherClick ? weather() : Container()
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -183,6 +198,7 @@ class _weatherState extends State<weather> {
           )
         : Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "Weather Details",
