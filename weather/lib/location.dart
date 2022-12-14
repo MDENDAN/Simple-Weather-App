@@ -19,6 +19,7 @@ class _LocationPageState extends State<LocationPage> {
   String? _currentAddress;
   Position? _currentPosition;
   bool isWeatherClick = false;
+  bool isLocationClick = false;
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -55,7 +56,10 @@ class _LocationPageState extends State<LocationPage> {
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
-      setState(() => _currentPosition = position);
+      setState(() {
+        _currentPosition = position;
+        isLocationClick = true;
+      });
       _getAddressFromLatLng(_currentPosition!);
     }).catchError((e) {
       debugPrint(e);
@@ -113,14 +117,16 @@ class _LocationPageState extends State<LocationPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        getWeatherDetails();
-                        setState(() {
-                          isWeatherClick = true;
-                        });
-                      },
-                      child: Text("Get Weather Details")),
+                  isLocationClick
+                      ? ElevatedButton(
+                          onPressed: () {
+                            getWeatherDetails();
+                            setState(() {
+                              isWeatherClick = true;
+                            });
+                          },
+                          child: Text("Get Weather Details"))
+                      : Container(),
                   SizedBox(
                     height: 10,
                   ),
@@ -210,9 +216,10 @@ class _weatherState extends State<weather> {
                 height: 7,
               ),
               Text(
-                "Weather = " + data["weather"][0]["main"].toString() ??
-                    "" + ", " + data["weather"][0]["description"].toString() ??
-                    "",
+                "Weather = " +
+                    data["weather"][0]["main"].toString() +
+                    ", " +
+                    data["weather"][0]["description"].toString(),
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -220,52 +227,52 @@ class _weatherState extends State<weather> {
               SizedBox(
                 height: 7,
               ),
-              // Text(
-              //   "Current Temperature = " +
-              //       data["main"]["temp"].toString() +
-              //       ", Feels Like = " +
-              //       data["main"]["feels_like"].toString(),
-              //   style: TextStyle(
-              //     fontSize: 16,
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 7,
-              // ),
-              // Text(
-              //   "Minimum Temp = " +
-              //       data["main"]["temp_min"].toString() +
-              //       ", Maximum Temp = " +
-              //       data["main"]["temp_max"].toString(),
-              //   style: TextStyle(
-              //     fontSize: 16,
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 7,
-              // ),
-              // Text(
-              //   "Pressure = " + data["main"]["pressure"].toString(),
-              //   style: TextStyle(
-              //     fontSize: 16,
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 7,
-              // ),
-              // Text(
-              //   "Humidity = ${data["main"]["humidity"].toString()}",
-              //   style: TextStyle(
-              //     fontSize: 16,
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 7,
-              // ),
-              // Text(
-              //   "Wind Speed = ${data["wind"]["speed"].toString()}, Wind direction: ${data["wind"]["deg"]}",
-              //   style: TextStyle(fontSize: 16, fontFamily: "RaleWay"),
-              // ),
+              Text(
+                "Current Temperature = " +
+                    data["main"]["temp"].toString() +
+                    ", Feels Like = " +
+                    data["main"]["feels_like"].toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              Text(
+                "Minimum Temp = " +
+                    data["main"]["temp_min"].toString() +
+                    ", Maximum Temp = " +
+                    data["main"]["temp_max"].toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              Text(
+                "Pressure = " + data["main"]["pressure"].toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              Text(
+                "Humidity = ${data["main"]["humidity"].toString()}",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              Text(
+                "Wind Speed = ${data["wind"]["speed"].toString()}, Wind direction: ${data["wind"]["deg"]}",
+                style: TextStyle(fontSize: 16, fontFamily: "RaleWay"),
+              ),
             ],
           );
   }
